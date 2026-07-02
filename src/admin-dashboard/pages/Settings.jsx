@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
-import { useAuth } from "../../shared/context/AuthContext";
+import { useAuth } from "../../shared/context/useAuth";
 import api from "../../shared/api/axios";
 import { FaLock, FaUserCircle, FaCheck } from "react-icons/fa";
 

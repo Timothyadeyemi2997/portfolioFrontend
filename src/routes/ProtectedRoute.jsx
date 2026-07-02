@@ -1,11 +1,5 @@
-import {
-  Navigate,
-} from "react-router-dom";
-
-import {
-  useAuthContext,
-} from "../shared/context/AuthContext";
-
+import { Navigate } from "react-router-dom";
+import { useAuthContext } from "../shared/context/useAuth";
 import Loader from "../shared/components/ui/Loader";
 
 const ProtectedRoute = ({

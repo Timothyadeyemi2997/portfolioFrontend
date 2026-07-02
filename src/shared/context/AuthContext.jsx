@@ -1,20 +1,23 @@
+/* @refresh reset */
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../api/axios"
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [admin, setAdmin] = useState(null);
-  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true); // ✅ ProtectedRoute needs this
 
   useEffect(() => {
     // Rehydrate auth state from localStorage on app load
     const token = localStorage.getItem("adminToken");
     if ( token) {
-      api.get("/admin/me")
-        .then((res) => setAdmin(res.data))
-        .catch(() => localStorage.removeItem("adminToken"))
+      api.get("/auth/me")
+        .then((res) => setAdmin(res.data.data ?? res.data))
+        .catch(() => {
+          localStorage.removeItem("adminToken"); 
+          setAdmin(null);
+        })
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
@@ -37,7 +40,6 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         admin,
-        token,
         login,
         logout,
         loading,           // ProtectedRoute uses this
@@ -48,6 +50,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext (AuthContext);
-export const useAuthContext = () => useContext(AuthContext);

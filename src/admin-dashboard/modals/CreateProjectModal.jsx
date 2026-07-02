@@ -1,5 +1,6 @@
 import { useState } from "react";
 import * as projectService from "../../shared/services/project.service";
+import { FaTimes } from "react-icons/fa";
 import UploadDropzone from "../../shared/components/ui/uploadDropzone";
 import ImagePreview from "../../shared/components/ImagePreview";
 
@@ -7,7 +8,6 @@ const INITIAL = { title: "", description: "", techStack: "", liveUrl: "", github
 
 const CreateProjectModal = ({ isOpen, onClose, onSubmit }) => {
   const [form, setForm] = useState(INITIAL);
-  const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -18,14 +18,6 @@ const CreateProjectModal = ({ isOpen, onClose, onSubmit }) => {
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleImage = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setForm((prev) => ({ ...prev, image: file }));
-      setPreview(URL.createObjectURL(file));
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -34,7 +26,7 @@ const CreateProjectModal = ({ isOpen, onClose, onSubmit }) => {
     const data = new FormData();
     data.append("title", form.title);
     data.append("description", form.description);
-    data.append("techStack", JSON.stringify(form.techStack.split(",").map((t) => t.trim()).filter(Boolean)));
+    data.append("technologies", JSON.stringify(form.techStack.split(",").map((t) => t.trim()).filter(Boolean)));
     data.append("liveUrl", form.liveUrl);
     data.append("githubUrl", form.githubUrl);
     data.append("featured", form.featured);
@@ -44,7 +36,6 @@ const CreateProjectModal = ({ isOpen, onClose, onSubmit }) => {
       setLoading(true);
       await onSubmit(data);
       setForm(INITIAL);
-      setPreview(null);
       onClose();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to create project");
@@ -73,18 +64,14 @@ const CreateProjectModal = ({ isOpen, onClose, onSubmit }) => {
 
           {/* Image */}
           <div>
-            <label className="block text-[#89979B] text-sm font-medium mb-2">Project Image</label>
-            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#1C3347] rounded-xl cursor-pointer hover:border-[#00ED64]/50 hover:bg-[#00ED64]/5 transition-all overflow-hidden">
-              {preview ? (
-                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-              ) : (
-                <div className="flex flex-col items-center gap-2 text-[#89979B]">
-                  <FaCloudUploadAlt size={24} />
-                  <span className="text-sm">Click to upload</span>
-                </div>
-              )}
-              <input type="file" accept="image/*" className="hidden" onChange={handleImage} />
+            <label className="block text-[#89979B] text-sm font-medium mb-2">
+              Project Image
             </label>
+            <UploadDropzone
+              image={form.image}
+              setImage={(file) => setForm((prev) => ({ ...prev, image: file }))}
+            />
+            <ImagePreview file={form.image} />
           </div>
 
           {/* Title */}

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // PUBLIC PAGES
 import Home from "@public-site/pages/Home";
@@ -19,21 +19,22 @@ const AppRoutes = () => {
       <Routes>
 
         {/* Public Website */}
-        <Route
-          path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
 
-        <Route
-          path="/projects/:id" element={<ProjectDetails />} />
+        <Route path="/projects/:id" element={<ProjectDetails />} />
 
         {/* Admin Login */}
-        <Route
-          path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* Protected Admin Area */}
+        {/* /admin > redirect to /admin/dashboard */}
         <Route
-          path="/admin" element={ <ProtectedRoute>
-              <DashboardPage /> 
-              </ProtectedRoute> } />
+          path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+
+          {/* Protected Admin Area */}
+          <Route path="/admin/dashboard" element={ <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute> } />
+
 
         <Route
           path="/admin/projects"

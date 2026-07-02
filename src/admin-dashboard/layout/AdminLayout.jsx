@@ -1,10 +1,12 @@
+import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import { useAuth } from "../../shared/context/AuthContext";
+import { useAuth } from "../../shared/context/useAuth";
 import { Navigate } from "react-router-dom";
 
 const AdminLayout = ({ children }) => {
   const { admin, loading } = useAuth();
+  const [collapsed, setCollapsed] = useState(false);
 
   if (loading) {
     return (
@@ -18,8 +20,12 @@ const AdminLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-[#001E2B] flex">
-      <Sidebar />
-      <div className="flex-1 ml-64 flex flex-col min-h-screen">
+      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      <div
+        className={`${
+          collapsed ? "ml-16" : "ml-64"
+        } flex-1 flex flex-col min-h-screen transition-all duration-300`}
+      >
         <Topbar />
         <main className="flex-1 p-8">{children}</main>
       </div>

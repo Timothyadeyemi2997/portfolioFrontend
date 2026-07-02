@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { useAuth } from "../../shared/context/AuthContext";
+import { useAuth } from "../../shared/context/useAuth";
 import { FaLeaf, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const AdminLogin = () => {

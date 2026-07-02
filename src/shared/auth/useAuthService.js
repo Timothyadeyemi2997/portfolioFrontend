@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import * as authService from "./auth.service";
 
 export const useAuth = () => {
