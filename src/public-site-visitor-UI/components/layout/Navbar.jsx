@@ -12,24 +12,7 @@ const navLinks = [
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    // Persist dark mode preference across reloads
-    return localStorage.getItem("theme") === "dark";
-  });
 
-  // Apply dark class to <html> and persist preference
-  useEffect(() => {
-    const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [darkMode]);
-
-  // Scroll effect
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
@@ -47,14 +30,14 @@ const Navbar = () => {
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "backdrop-blur-md bg-white/20 dark:bg-black/30 border-b border-white/20 shadow-sm"
+          ? "backdrop-blur-md bg-white/20 border-b border-white/20 shadow-sm"
           : "bg-transparent"
       }`}
     >
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <Link to="/" className="text-lg font-semibold text-white dark:text-white">
+        <Link to="/" className="text-lg font-semibold text-white">
           Timothy Adeyemi
         </Link>
 
@@ -65,7 +48,7 @@ const Navbar = () => {
               <a
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="text-sm text-gray-200 dark:text-gray-300 hover:text-white dark:hover:text-white transition-colors"
+                className="text-sm text-gray-200 hover:text-white transition-colors"
               >
                 {link.label}
               </a>
@@ -75,16 +58,6 @@ const Navbar = () => {
 
         {/* Right Actions */}
         <div className="hidden md:flex items-center gap-3">
-          {/* Dark mode toggle */}
-          <button
-            onClick={() => setDarkMode((prev) => !prev)}
-            className="w-9 h-9 flex items-center justify-center rounded-lg border border-white/30 bg-white/10 hover:bg-white/20 transition-colors"
-            aria-label="Toggle dark mode"
-          >
-            {darkMode ? "☀️" : "🌙"}
-          </button>
-
-          {/* Resume download */}
           <a
             href="/resume.pdf"
             download
@@ -111,24 +84,18 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden backdrop-blur-md bg-[#001e2b]/90 dark:bg-black/80 border-t border-white/10 px-6 py-4 flex flex-col gap-4">
+        <div className="md:hidden backdrop-blur-md bg-[#001e2b]/90 border-t border-white/10 px-6 py-4 flex flex-col gap-4">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="text-sm text-gray-200 dark:text-gray-300 hover:text-lime focus:text-lime transition-colors"
-            >  
+              className="text-sm text-gray-200 hover:text-white transition-colors"
+            >
               {link.label}
             </a>
           ))}
           <div className="flex items-center gap-3 pt-2 border-t border-white/10">
-            <button
-              onClick={() => setDarkMode((prev) => !prev)}
-              className="text-sm text-gray-300 dark:text-gray-200"
-            >
-              {darkMode ? "Light mode ☀️" : "Dark mode 🌙"}
-            </button>
             <a
               href="/resume.pdf"
               download
