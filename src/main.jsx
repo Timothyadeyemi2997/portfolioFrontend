@@ -5,6 +5,10 @@ import { AuthProvider } from "./shared/context/AuthContext";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import "./index.css";
+import { startKeepAlive } from "./shared/utils/keepAlive";
+
+// start pinging backend to prevent cold starts
+startKeepAlive();
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
